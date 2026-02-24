@@ -1,0 +1,6 @@
+{
+  "name": "pd-modules",
+  "private": true,
+  "description": "Internal shared modules for Punch Drunk Productions",
+  "workspaces": ["packages/*"]
+}

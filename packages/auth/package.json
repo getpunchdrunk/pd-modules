@@ -1,0 +1,18 @@
+{
+  "name": "@punch-drunk/auth",
+  "version": "1.0.0",
+  "description": "Punch Drunk Auth integration for Express apps",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "files": ["src"],
+  "peerDependencies": {
+    "express": ">=4.0.0",
+    "express-session": ">=1.17.0",
+    "pg": ">=8.0.0"
+  },
+  "dependencies": {
+    "connect-pg-simple": "^9.0.0",
+    "cookie-signature": "^1.2.1",
+    "express-rate-limit": "^7.0.0"
+  }
+}
