@@ -104,6 +104,14 @@ export interface PunchDrunkAuthOptions {
    * Set to "" to use the default route paths.
    */
   routeStyle?: "simple" | "api";
+
+  /**
+   * Value passed to Express `app.set("trust proxy", ...)` (default: 1).
+   * Must match the actual number of proxies in front of the app. If this is
+   * higher than reality, clients can spoof X-Forwarded-For, which the exchange
+   * rate limiter keys on. Set explicitly for your deployment topology.
+   */
+  trustProxy?: number | boolean | string;
 }
 
 // ---------------------------------------------------------------------------
@@ -153,19 +161,24 @@ export async function registerPunchDrunkAuth(
     exchangeRateWindow = 15 * 60 * 1000,
     sessionTableName = "session",
     routeStyle = "api",
+    trustProxy = 1,
   } = options;
 
   const isProduction =
     process.env.NODE_ENV === "production" || !!process.env.REPL_ID;
 
-  // --- Trust proxy (required for secure cookies behind Replit/Cloudflare) ---
-  app.set("trust proxy", 1);
+  // --- Trust proxy (required for secure cookies behind Cloudflare/Replit) ---
+  // Configurable: must match the real proxy count, otherwise clients can spoof
+  // X-Forwarded-For (which the exchange rate limiter keys on).
+  app.set("trust proxy", trustProxy);
 
   // --- Security headers ---
   app.use((_req: Request, res: Response, next: NextFunction) => {
     res.setHeader("X-Content-Type-Options", "nosniff");
     res.setHeader("X-Frame-Options", "DENY");
-    res.setHeader("X-XSS-Protection", "1; mode=block");
+    // X-XSS-Protection is deprecated; "0" is current guidance. The legacy
+    // filter can itself introduce vulnerabilities in older browsers.
+    res.setHeader("X-XSS-Protection", "0");
     res.setHeader("Referrer-Policy", "strict-origin-when-cross-origin");
     next();
   });
@@ -255,8 +268,11 @@ export async function registerPunchDrunkAuth(
       return res.redirect(postLoginRedirect);
     }
 
-    const proto = req.headers["x-forwarded-proto"] || req.protocol;
-    const redirectUri = `${proto}://${req.get("host")}/auth/callback`;
+    // Derive the callback from the configured appUrl rather than the inbound
+    // Host header. The PD Auth server validates redirect_uri against the
+    // registered app URL, so trusting a client-controlled header here is both
+    // unnecessary and a hardening risk.
+    const redirectUri = new URL("/auth/callback", appUrl).toString();
 
     console.log(`[pd-auth] login redirect_uri: ${redirectUri}`);
 
@@ -296,12 +312,12 @@ export async function registerPunchDrunkAuth(
       }
 
       const pdUser: PdAuthUser = data.user;
-      console.log(`[pd-auth] validated user: ${pdUser.email}`);
+      console.log(`[pd-auth] token validated for user id ${pdUser.userId}`);
 
       // App-specific user lookup
       const localUser = await lookupUser(pdUser);
       if (!localUser) {
-        console.log(`[pd-auth] no local user for ${pdUser.email}`);
+        console.log(`[pd-auth] no local user for id ${pdUser.userId}`);
         return res.redirect("/?auth_error=access_denied");
       }
 
@@ -322,7 +338,7 @@ export async function registerPunchDrunkAuth(
         expiresAt: Date.now() + 60_000,
       });
 
-      console.log(`[pd-auth] auth code generated for ${pdUser.email}, redirecting`);
+      console.log(`[pd-auth] auth code generated for user id ${pdUser.userId}, redirecting`);
       return res.redirect(`${postLoginRedirect}?auth_code=${authCode}`);
     } catch (error) {
       console.error("[pd-auth] callback error:", error);
@@ -345,23 +361,34 @@ export async function registerPunchDrunkAuth(
 
     pendingAuthTokens.delete(code);
 
-    // Set session data
-    req.session.pdAuth = pending.session;
-
-    req.session.save((err) => {
-      if (err) {
-        console.error("[pd-auth] session save error:", err);
+    // Regenerate the session ID before storing authenticated data. This
+    // prevents session fixation: any pre-auth session identifier a victim may
+    // have been seeded with is discarded and replaced with a fresh one at the
+    // moment of authentication.
+    req.session.regenerate((regenErr) => {
+      if (regenErr) {
+        console.error("[pd-auth] session regenerate error:", regenErr);
         return res.status(500).json({ error: "Session error" });
       }
 
-      // Manually set cookie to guarantee delivery
-      setSessionCookie(req, res);
+      // Set session data on the fresh session
+      req.session.pdAuth = pending.session;
 
-      console.log(
-        `[pd-auth] session established: userId=${pending.session.userId}, sid=${req.sessionID}`
-      );
+      req.session.save((err) => {
+        if (err) {
+          console.error("[pd-auth] session save error:", err);
+          return res.status(500).json({ error: "Session error" });
+        }
 
-      return res.json(pending.session);
+        // Manually set cookie to guarantee delivery
+        setSessionCookie(req, res);
+
+        console.log(
+          `[pd-auth] session established for userId=${pending.session.userId}`
+        );
+
+        return res.json(pending.session);
+      });
     });
   });
 

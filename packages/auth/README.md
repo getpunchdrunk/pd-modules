@@ -31,7 +31,7 @@ This works reliably across all browsers, including mobile.
 ## Installation
 
 ```bash
-npm install github:punch-drunk/pd-modules#v1.0.0
+npm install github:getpunchdrunk/pd-modules#v1.1.0
 ```
 
 ## Usage
@@ -150,6 +150,7 @@ function App() {
 | `exchangeRateWindow` | `number` | 15 min | Rate limit window in milliseconds |
 | `sessionTableName` | `string` | `"session"` | PostgreSQL table name for sessions |
 | `routeStyle` | `"simple" \| "api"` | `"api"` | Login route: `/login` or `/api/auth/login` |
+| `trustProxy` | `number \| boolean \| string` | `1` | Value for Express `trust proxy`. Must match the real number of proxies in front of the app, or clients can spoof `X-Forwarded-For` (used by the rate limiter) |
 
 ## Session Data
 

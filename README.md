@@ -23,7 +23,7 @@ Express middleware for Punch Drunk Auth integration. Handles the complete OAuth 
 
 ```bash
 # Install from GitHub
-npm install github:punch-drunk/pd-modules#v1.0.0
+npm install github:getpunchdrunk/pd-modules#v1.1.0
 ```
 
 ## Quick Start
