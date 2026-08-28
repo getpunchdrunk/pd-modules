@@ -1,0 +1,141 @@
+/* Brand scale, then semantic aliases. Semantic names only in product code:
+   --surface-*, --text-*, --border-*. Never reference --pd-* directly in a
+   component, or dark mode becomes a rewrite.
+
+   Channel triplets (no hsl() wrapper) are kept for shadcn/Tailwind v3
+   compatibility: the apps consume them as hsl(var(--primary) / <alpha-value>). */
+
+:root {
+  /* ---- Brand ---- */
+  --pd-pink: #FD0C73;              /* canonical action color — fills only */
+  --pd-pink-text: #D40C64;         /* same hue, darkened for lettering (5.2:1 on white) */
+  --pd-navy: #313C96;              /* 233 51% 39% — as shipped in all three apps */
+  --pd-sky-light: #74B4E3;
+  --pd-sky: #5397D1;
+  --pd-sky-deep: #2270B8;
+  --pd-ink: #212121;
+  --pd-paper: #FFFFFF;
+
+  /* ---- shadcn / Tailwind v3 channel triplets (light) ---- */
+  --background: 0 0% 100%;
+  --foreground: 0 0% 13%;
+  --border: 0 0% 90%;
+  --input: 0 0% 85%;
+  --card: 0 0% 99%;
+  --card-foreground: 0 0% 13%;
+  --card-border: 0 0% 91%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 0 0% 13%;
+  --popover-border: 0 0% 90%;
+  --primary: 334 98% 52%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 0 0% 95%;
+  --secondary-foreground: 0 0% 25%;
+  --muted: 0 0% 96%;
+  --muted-foreground: 0 0% 41%;
+  --accent: 209 35% 93%;
+  --accent-foreground: 209 45% 32%;
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 0 0% 100%;
+  --ring: 334 98% 52%;
+  --sidebar: 0 0% 97%;
+  --sidebar-foreground: 0 0% 13%;
+  --sidebar-border: 0 0% 90%;
+  --sidebar-primary: 334 98% 52%;   /* pink highlight — was navy in FileTransfers + Slider */
+  --sidebar-primary-foreground: 0 0% 100%;
+  --sidebar-accent: 209 30% 93%;
+  --sidebar-accent-foreground: 209 45% 35%;
+  --sidebar-ring: 334 98% 52%;
+
+  /* ---- Semantic aliases (use these) ---- */
+  --surface-page: hsl(var(--background));
+  --surface-card: hsl(var(--card));
+  --surface-sunken: hsl(0 0% 98%);
+  --surface-sidebar: hsl(var(--sidebar));
+  --surface-hover: hsl(0 0% 96%);
+  --text-primary: hsl(var(--foreground));
+  --text-secondary: hsl(0 0% 29%);
+  --text-muted: hsl(var(--muted-foreground));
+  --text-inverse: hsl(0 0% 100%);
+  --text-action: var(--pd-pink-text);   /* pink as a letterform. Never --pd-pink for text. */
+  --text-link: var(--pd-navy);
+  --border-subtle: hsl(0 0% 95%);
+  --border-default: hsl(var(--border));
+  --border-strong: hsl(var(--input));
+  --action-primary: var(--pd-pink);
+  --action-primary-hover: #E10B68;
+  --action-primary-text: hsl(0 0% 100%);   /* text ON the pink fill */
+
+  /* ---- Status ---- */
+  --status-positive: var(--pd-navy);
+  --status-attention: var(--pd-pink);
+  --status-attention-text: var(--pd-pink-text);
+  --status-neutral: hsl(var(--muted-foreground));
+  --status-info: var(--pd-sky-deep);
+  --status-danger: hsl(var(--destructive));
+  --surface-attention: #FFF5F9;
+  --border-attention: #FBC6DC;
+  --surface-info: #EDF5FB;
+
+  /* ---- Charts: brand first, then a categorical extension ---- */
+  --chart-1: 334 98% 52%;
+  --chart-2: 209 58% 57%;
+  --chart-3: 233 51% 39%;
+  --chart-4: 204 66% 67%;
+  --chart-5: 205 69% 43%;
+  --chart-6: 0 0% 62%;
+  --chart-7: 262 45% 55%;
+  --chart-8: 173 45% 40%;
+}
+
+.dark {
+  --background: 0 0% 7%;
+  --foreground: 0 0% 93%;
+  --border: 0 0% 18%;
+  --input: 0 0% 22%;
+  --card: 0 0% 10%;
+  --card-foreground: 0 0% 93%;
+  --card-border: 0 0% 16%;
+  --popover: 0 0% 10%;
+  --popover-foreground: 0 0% 93%;
+  --popover-border: 0 0% 18%;
+  --primary: 334 98% 56%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 0 0% 15%;
+  --secondary-foreground: 0 0% 85%;
+  --muted: 0 0% 14%;
+  --muted-foreground: 0 0% 55%;
+  --accent: 209 35% 18%;
+  --accent-foreground: 209 50% 75%;
+  --destructive: 0 72% 51%;
+  --destructive-foreground: 0 0% 100%;
+  --ring: 334 98% 56%;
+  --sidebar: 0 0% 8%;
+  --sidebar-foreground: 0 0% 93%;
+  --sidebar-border: 0 0% 16%;
+  --sidebar-primary: 334 98% 56%;
+  --sidebar-primary-foreground: 0 0% 100%;
+  --sidebar-accent: 209 30% 15%;
+  --sidebar-accent-foreground: 209 50% 75%;
+  --sidebar-ring: 334 98% 56%;
+
+  --surface-sunken: hsl(0 0% 5%);
+  --surface-hover: hsl(0 0% 13%);
+  --text-secondary: hsl(0 0% 78%);
+  --text-link: #8E97E8;
+  --border-subtle: hsl(0 0% 14%);
+  --action-primary: #FD2A85;
+  --action-primary-hover: #FD4E99;
+  --text-action: #FF6FA8;                 /* 5.4:1 on the dark page surface */
+  --status-attention-text: #FF6FA8;
+  --status-positive: #8E97E8;
+  --surface-attention: #2A0E1B;
+  --border-attention: #5C1436;
+  --surface-info: #0E1D2A;
+
+  --chart-1: 334 90% 60%;
+  --chart-2: 209 58% 62%;
+  --chart-3: 233 55% 62%;
+  --chart-4: 204 60% 72%;
+  --chart-5: 205 60% 55%;
+}

@@ -1,0 +1,44 @@
+/* Three roles, no more: headings name things, UI text is interface language,
+   mono is anything you would sort or sum. */
+
+:root {
+  --font-heading: "Noto Sans Display", "Noto Sans", sans-serif;
+  --font-sans: "Inter", "Geist", "Noto Sans", sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, monospace;
+  --font-serif: Georgia, serif;
+
+  --text-2xs: 10.5px;
+  --text-xs: 11px;
+  --text-sm: 12px;
+  --text-base: 13px;
+  --text-md: 13.5px;
+  --text-lg: 15px;
+  --text-xl: 19px;
+  --text-2xl: 21px;
+  --text-3xl: 27px;
+
+  --leading-tight: 1.15;
+  --leading-snug: 1.35;
+  --leading-normal: 1.55;
+
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+
+  /* Inter needs no optical tracking at UI sizes; headings do. */
+  --tracking-heading: -0.02em;
+  --tracking-heading-sm: -0.01em;
+  --tracking-normal: 0em;
+  --tracking-eyebrow: 0.08em;
+  --tracking-wordmark: 0.11em;
+}
+
+/* Every figure that can be sorted, summed or compared gets tabular digits.
+   Applied at the token layer so no one has to remember it per component. */
+[data-numeric],
+.pd-numeric,
+table td,
+table th {
+  font-variant-numeric: tabular-nums;
+}

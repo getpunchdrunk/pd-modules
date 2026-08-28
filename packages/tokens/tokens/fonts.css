@@ -1,0 +1,94 @@
+/* Self-hosted webfonts. Static versioned paths, no query strings (they bypass
+   CDN caching). Never overwrite a shipped file — publish -v2 and update the
+   path here.
+
+   Variable faces where the family ships one: a single file covers the whole
+   100–900 weight axis, so any weight is available without another request.
+
+   In pd-modules these live at packages/tokens/fonts/ and are served at /fonts/.
+   In this project they are at ./fonts/ — hence the relative url() below, which
+   resolves correctly from styles.css at the project root. */
+
+/* ---- Noto Sans Display — headings (static; Google ships the variable as TTF) ---- */
+@font-face {
+  font-family: "Noto Sans Display";
+  src: url("../fonts/noto-sans-display-400-v1.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Noto Sans Display";
+  src: url("../fonts/noto-sans-display-500-v1.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Noto Sans Display";
+  src: url("../fonts/noto-sans-display-600-v1.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Noto Sans Display";
+  src: url("../fonts/noto-sans-display-700-v1.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ---- Geist Mono — data and numerals (variable, 100–900 + italic) ---- */
+@font-face {
+  font-family: "Geist Mono";
+  src: url("../fonts/geist-mono-variable-v1.woff2") format("woff2-variations"),
+       url("../fonts/geist-mono-variable-v1.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Geist Mono";
+  src: url("../fonts/geist-mono-italic-variable-v1.woff2") format("woff2-variations"),
+       url("../fonts/geist-mono-italic-variable-v1.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* ---- Geist Sans — available, pending the UI-font decision (variable) ---- */
+@font-face {
+  font-family: "Geist";
+  src: url("../fonts/geist-sans-variable-v1.woff2") format("woff2-variations"),
+       url("../fonts/geist-sans-variable-v1.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Geist";
+  src: url("../fonts/geist-sans-italic-variable-v1.woff2") format("woff2-variations"),
+       url("../fonts/geist-sans-italic-variable-v1.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* ---- Inter — UI text (variable, 100–900 + italic) ---- */
+@font-face {
+  font-family: "Inter";
+  src: url("../fonts/inter-variable-v1.woff2") format("woff2-variations"),
+       url("../fonts/inter-variable-v1.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Inter";
+  src: url("../fonts/inter-variable-italic-v1.woff2") format("woff2-variations"),
+       url("../fonts/inter-variable-italic-v1.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: italic;
+  font-display: swap;
+}

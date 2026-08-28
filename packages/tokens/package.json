@@ -1,0 +1,21 @@
+{
+  "name": "@punch-drunk/tokens",
+  "version": "1.0.0",
+  "description": "Punch Drunk design tokens, self-hosted webfonts, and global CSS for internal apps",
+  "main": "styles.css",
+  "style": "styles.css",
+  "exports": {
+    ".": "./styles.css",
+    "./styles.css": "./styles.css",
+    "./tokens/*": "./tokens/*",
+    "./fonts/*": "./fonts/*"
+  },
+  "files": [
+    "styles.css",
+    "tokens",
+    "fonts"
+  ],
+  "sideEffects": [
+    "*.css"
+  ]
+}

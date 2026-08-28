@@ -1,0 +1,17 @@
+{
+  "name": "@punch-drunk/ui",
+  "version": "0.1.0",
+  "description": "Punch Drunk React UI primitives for internal apps",
+  "main": "src/index.js",
+  "types": "src/index.d.ts",
+  "files": [
+    "src",
+    "assets",
+    "icons"
+  ],
+  "peerDependencies": {
+    "react": ">=18.0.0",
+    "react-dom": ">=18.0.0",
+    "@punch-drunk/tokens": ">=1.0.0"
+  }
+}

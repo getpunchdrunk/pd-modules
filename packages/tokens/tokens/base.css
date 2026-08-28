@@ -1,0 +1,21 @@
+/* Base reset. Kept deliberately tiny — the system styles inline, so this file
+   only fixes things that MUST be global.
+
+   box-sizing: without it, a bordered 15px box computes to 18px and an
+   unbordered one to 15px, so a checkbox visibly changes size when ticked.
+   Every control in the system declares its size as its OUTER size. */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Interactive elements inherit type; never let a browser default leak in. */
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
