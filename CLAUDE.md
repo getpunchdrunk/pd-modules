@@ -10,6 +10,13 @@
 - After making changes, explain what you did in plain terms and tell me how to test it.
 - If something I'm asking for seems risky or could break things, tell me honestly and suggest a safer path.
 - Never assume — if my request is ambiguous, ask rather than guess.
+- **Carve-out for documentation.** The written-plan-and-approval step above applies to
+  **code**. Documentation-only changes under `docs/` — writing or revising a notes or
+  convention file, recording a decision made elsewhere — do **not** require it when I
+  have asked for them explicitly. Explain what you wrote afterwards, as usual. This
+  carve-out does not extend to `README.md`, `CHANGELOG.md`, `SECURITY_REVIEW.md`, this
+  file, or any package `README` — those describe the shipped contract, and a consumer
+  can act on them.
 
 ## Safety Rules
 
