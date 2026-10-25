@@ -36,7 +36,7 @@ export function Combobox({
           background: "var(--surface-card)",
           border: "1px solid " + (open ? "var(--action-primary)" : "var(--border-strong)"),
           borderRadius: "var(--radius-md)",
-          boxShadow: open ? "0 0 0 3px rgba(253, 12, 115, 0.10)" : undefined
+          boxShadow: open ? "0 0 0 3px hsl(var(--ring) / 0.10)" : undefined
         }}
       >
         {multi &&

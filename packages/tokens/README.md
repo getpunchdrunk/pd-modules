@@ -1,83 +1,59 @@
 # @punch-drunk/tokens
 
-Design tokens, self-hosted webfonts and the global CSS every Punch Drunk app
-consumes. No build step — the package ships CSS as source, the same contract as
-`@punch-drunk/auth` shipping TypeScript.
-
-## Install
+Brand foundations for every Punch Drunk app: colour, type, spacing, radius,
+shadow, motion, interaction utilities, print, and the self-hosted fonts.
 
 ```bash
-npm install github:getpunchdrunk/pd-modules#tokens-v1.0.0
+# Install tokens and ui together, in one command
+npm install \
+  https://github.com/getpunchdrunk/pd-modules/releases/download/tokens-v1.2.0/punch-drunk-tokens-1.2.0.tgz \
+  https://github.com/getpunchdrunk/pd-modules/releases/download/ui-v0.3.0/punch-drunk-ui-0.3.0.tgz
 ```
 
-## Use
-
-Import once, at the top of the app's CSS entry (`client/src/index.css`):
+Packages ship as tarballs attached to the GitHub Release for each tag. npm cannot
+install a subfolder of a git repo, so the old `github:getpunchdrunk/pd-modules#tag`
+form resolves to the unnamed workspace root and fails. Install both packages in
+**one** command: `@punch-drunk/ui` lists `@punch-drunk/tokens` as a peer, and
+installed alone npm would look for the tokens package on the public registry.
 
 ```css
 @import "@punch-drunk/tokens/styles.css";
 ```
 
-Then serve the fonts at the web path `/fonts/`. The `@font-face` rules use
-`../fonts/`, relative to `tokens/fonts.css` — with Vite, copy or symlink
-`node_modules/@punch-drunk/tokens/fonts` into `client/public/fonts`.
+That single import pulls in all eleven token files. Apps should never import a
+token file directly except to override one deliberately.
 
-## What's inside
-
-| File | Contents |
+| File | What's in it |
 |---|---|
-| `styles.css` | Entry point. `@import` lines only — never add rules here |
-| `tokens/base.css` | `box-sizing: border-box` reset and form-element font inheritance |
-| `tokens/fonts.css` | `@font-face` for Inter, Noto Sans Display, Geist Mono, Geist |
-| `tokens/colors.css` | Brand scale, semantic aliases, shadcn channel triplets, dark theme |
+| `tokens/fonts.css` | `@font-face` rules, versioned static paths |
+| `tokens/base.css` | Reset and element defaults |
+| `tokens/colors.css` | Brand scale, v3 channel triplets, semantic aliases, status tints, event palette, chart ramp, desk grey, ink-on-dark set, dark theme |
 | `tokens/typography.css` | Font roles, size ramp, weights, tracking, tabular-nums default |
-| `tokens/spacing.css` | Spacing scale plus the measured density values |
-| `tokens/radius.css` | 4 / 6 / 8 / pill |
+| `tokens/spacing.css` | Spacing scale and the measured density values |
+| `tokens/radius.css` | 2 / 4 / 6 / 8 / pill |
 | `tokens/shadows.css` | Hard 2px system, overlay exception, focus ring |
 | `tokens/motion.css` | Durations, easing, reduced-motion collapse |
-| `tokens/elevate.css` | Hover/press/toggle overlays and `.pd-stripes` texture |
+| `tokens/elevate.css` | Hover/press/toggle overlays, `.pd-stripes`, `.pd-skeleton` |
+| `tokens/print.css` | Print ink, hairlines, subtotal band, page-break rules |
 | `tokens/theme-v4.css` | Tailwind v4 `@theme inline` bridge |
-| `fonts/` | 10 woff2 files, 3 OFL licenses, and a README |
 
-## Rules
+## Fonts
 
-**Use semantic names, never brand names, in product code.** `var(--surface-card)`,
-`var(--text-muted)`, `var(--action-primary)` — not `var(--pd-pink)` and never a
-literal hex. Dark mode works only because every component reads semantics.
+Four families, all OFL 1.1, licenses included: Noto Sans Display (headings),
+Inter (UI), Geist Mono (data), Geist Sans. Served from static versioned paths
+(`/fonts/inter-variable-v1.woff2`) — **never query strings**, which bypass CDN
+caching.
 
-**Pink has two values.** `--action-primary` (`#FD0C73`) for fills with white text
-on them; `--text-action` (`#D40C64`) whenever pink is the letterform. Pink text
-at the fill value measures 3.6:1 and fails WCAG AA.
+## Dark mode
 
-**Fonts are versioned and immutable.** Never overwrite a shipped woff2 — publish
-`-v2.woff2` and change the path. Never append a query string to a font URL; it
-makes the CDN skip caching.
+Both themes ship. The trap that broke it once: a custom property substitutes
+where it is *declared*, so every alias built on a channel triplet
+(`--surface-card: hsl(var(--card))`) is re-declared inside `.dark`. Overriding
+`--card` alone leaves the alias frozen at its light value.
 
-**Tailwind.** v4 apps get everything from `theme-v4.css`. The v3 apps
-(FileTransfers, Audition, Slider) keep reading the channel triplets in
-`colors.css` through their existing `tailwind.config.ts`, so this package can be
-adopted before they migrate.
+## Migrating an existing app
 
-## Versioning
-
-Per-package tags: `tokens-vMAJOR.MINOR.PATCH`. Patch for a value correction,
-minor for new tokens, **major for renaming or removing a token** — consumers
-reference these by name in every component.
-
-## Migration notes for the shipped apps
-
-**FileTransfers** — blurred shadows to the hard 2px set; radii 3/6/9 to 4/6/8;
-`--font-mono` JetBrains Mono to Geist Mono; `--font-sans` Noto Sans to Inter; add
-`--font-heading`; add a dark theme (it has none); `--sidebar-primary` navy to
-pink; `--background` 98% to 100%.
-
-**Audition** — closest to target. `--primary` 338 to 334; Menlo to Geist Mono;
-`--font-sans` to Inter; chart palette to the brand ramp; radii to 4/6/8.
-
-**Slider** — `--primary` and `--sidebar-primary` navy to pink (navy survives as
-`--status-positive` and `--text-link`); Menlo to Geist Mono; `--font-sans` to
-Inter; chart palette to the brand ramp.
-
-**All three** — `.diagonal-stripes` / `.pd-stripes` consolidate to
-`.pd-stripes`; the elevate utilities move here unchanged; stop referencing
-literal colors in components.
+FileTransfers, audition and slider are Tailwind v3 + shadcn/ui. The v3 channel
+triplets in `colors.css` keep them working unchanged; `theme-v4.css` is there
+for when they move to v4. Per-app migration notes are in the design system's
+`readme.md`.

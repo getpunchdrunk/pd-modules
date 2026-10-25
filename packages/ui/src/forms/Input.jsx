@@ -44,7 +44,7 @@ export function Input({
           background: disabled ? "var(--surface-sunken)" : "var(--surface-card)",
           border: "1px solid " + (invalid || error ? "var(--action-primary)" : "var(--border-strong)"),
           borderRadius: "var(--radius-md)",
-          boxShadow: invalid || error ? "0 0 0 3px rgba(253, 12, 115, 0.10)" : undefined,
+          boxShadow: invalid || error ? "0 0 0 3px hsl(var(--ring) / 0.10)" : undefined,
           opacity: disabled ? 0.6 : 1,
           minWidth: 0
         }}

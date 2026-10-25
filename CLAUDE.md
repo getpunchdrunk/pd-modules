@@ -22,7 +22,7 @@
 
 - Before making any edit, explain: what file you're changing, why, and what the change does.
 - Never replace existing working code with a simpler version without explaining what the original code did and why your replacement is safe.
-- This package handles **auth, sessions, and cookies for every PD app that installs it**. Any change here can break login across the whole suite at once. Treat every edit as production-critical and explain the full blast radius before touching it.
+- `@punch-drunk/auth` handles **auth, sessions, and cookies for every PD app that installs it**. Any change here can break login across the whole suite at once. Treat every edit as production-critical and explain the full blast radius before touching it.
 - If you're unsure whether a change is safe, say so and ask.
 - Show the specific lines you plan to change before changing them.
 - Do not remove code that looks unused without confirming it's actually unused.
@@ -40,21 +40,34 @@ ever be committed here. See `SECURITY_REVIEW.md` for the standing security revie
 - **`@punch-drunk/auth`** — Express middleware for Punch Drunk Auth
   (`auth.punch-drunk.com`) integration. One `registerPunchDrunkAuth(app, options)`
   call wires up session middleware, security headers, and all auth routes, plus
-  `requireAuth` / `requireAdmin` / `getCurrentUser` helpers. This is currently the
-  only package.
+  `requireAuth` / `requireAdmin` / `getCurrentUser` helpers. On a deprecation path:
+  apps move to Clerk (identity-only) over time.
+- **`@punch-drunk/tokens`** — the PD internal design system's foundations: CSS
+  custom properties for colour, type, spacing, radius, shadow and motion, both
+  themes (`.dark` class), print tokens, the `elevate` and `.pd-stripes` utilities,
+  the Tailwind v4 bridge, and the self-hosted OFL fonts.
+- **`@punch-drunk/ui`** — 45 React components in nine families, styled only from
+  the tokens. Each ships a `.jsx`, a `.d.ts` props contract and a `.prompt.md`.
 
 ### Apps that consume it
 
-- File Transfers / Uploader (`files.punch-drunk.com`)
-- CrewSheet (`crewsheet.punch-drunk.com`)
+- **auth:** File Transfers / Uploader (`files.punch-drunk.com`), PD CrewSheet
+  (`crewsheet.punch-drunk.com`).
+- **tokens + ui:** the canonical PD internal style for every **internal** app —
+  Dashboard (`get.punch-drunk.com`, the first consumer and the reference
+  implementation), then Slider, Audition, FileTransfers, Scratchpad and the rest.
+  **CrewSheet and Endlist are external products with their own brands and are not
+  consumers.**
 
 When changing a package, remember every consumer above inherits the change on their
 next install. There is no gradual rollout — a bad release breaks all of them.
 
 ## Tech Stack
 
-- **Language:** TypeScript (100%)
-- **Runtime target:** Node.js + Express (peer dependency, `>=4`)
+- **Languages:** TypeScript (auth), JSX + `.d.ts` (ui), CSS (tokens)
+- **Runtime target (auth):** Node.js + Express (peer dependency, `>=4`)
+- **ui peers:** `react`, `react-dom` (>=18), `@punch-drunk/tokens` (>=1.2.0),
+  `recharts` (a regular peer — the barrel imports it, so it is not optional)
 - **Monorepo:** npm workspaces (`packages/*`)
 - **Auth package deps:** `connect-pg-simple`, `cookie-signature`, `express-rate-limit`
 - **Auth package peers:** `express`, `express-session`, `pg`
@@ -73,26 +86,61 @@ pd-modules/
       README.md           — full auth integration guide + options table
       src/
         index.ts          — entire auth module (single file)
+    tokens/
+      styles.css          — the one import; @import lines only
+      tokens/             — eleven token files
+      fonts/              — woff2 + OFL licenses
+    ui/
+      src/index.js        — barrel; src/index.d.ts mirrors it export for export
+      src/<family>/       — <Component>.jsx / .d.ts / .prompt.md
+      assets/, icons/     — logos, favicon, Lucide glyphs + lucide-paths.json
+KNOWN-ISSUES.md           — open issues deliberately not fixed yet
 ```
 
-## How This Package Is Published & Consumed
+## How These Packages Are Published & Consumed
 
-- **No build step.** `@punch-drunk/auth` ships TypeScript source directly
+- **No build step.** Every package ships source. `@punch-drunk/auth` ships TypeScript source directly
   (`"main": "src/index.ts"`, `"types": "src/index.ts"`). Consuming apps compile it
   through their own build. Do not add a `dist/` build or change `main` without
   discussing it — it changes how every consumer imports the package.
-- **Installed from GitHub by tag**, not from npm:
+- **Per-package tags:** `v*` for auth, `tokens-v*` and `ui-v*` for the design
+  system, each matching that package's `version`.
+- **npm cannot install a subfolder of a git repo.** `github:getpunchdrunk/pd-modules#tag`
+  installs the repo root, which is the unnamed workspace, and fails ("Invalid
+  package, must have name and version"). So tokens and ui ship as **tarballs
+  attached to GitHub Releases**, installed by URL, both in one command (ui peers on
+  tokens, and the `@punch-drunk` scope does not exist on the public registry):
   ```bash
-  npm install github:getpunchdrunk/pd-modules#v1.1.0
+  npm install \
+    https://github.com/getpunchdrunk/pd-modules/releases/download/tokens-v1.2.0/punch-drunk-tokens-1.2.0.tgz \
+    https://github.com/getpunchdrunk/pd-modules/releases/download/ui-v0.3.0/punch-drunk-ui-0.3.0.tgz
   ```
-- **Releases are git tags** (`vMAJOR.MINOR.PATCH`) that match the package `version`
-  in `packages/auth/package.json`. To cut a release: bump the version, update
-  `CHANGELOG.md`, commit, tag (`git tag v1.1.0`), and push the tag. Consumers then
-  bump their install ref.
+  The auth install line in its README has the same root-package problem; see
+  `KNOWN-ISSUES.md`.
+- **Release recipe (tokens / ui):** bump `version` in the package's
+  `package.json`, update `CHANGELOG.md` and the install URLs in the READMEs,
+  commit, tag (`git tag ui-v0.3.1`), push the commit and the tag, then
+  `npm pack` inside the package folder and
+  `gh release create ui-v0.3.1 punch-drunk-ui-0.3.1.tgz --notes-file <changelog section>`.
+  Re-install from the live URL before telling a consumer to upgrade.
+- **Releases (auth)** are git tags (`vMAJOR.MINOR.PATCH`) matching
+  `packages/auth/package.json`: bump, update `CHANGELOG.md`, commit, tag, push the tag.
 - **Versioning:** bump **patch** for fixes, **minor** for additive/backward-compatible
   changes (e.g. a new option with a default), **major** for anything that changes a
   public signature, the route paths, the session cookie behavior, or the consumer
   import contract.
+
+## Public-repo rules (design system)
+
+- **Fonts are OFL only**, each with its license file in `packages/tokens/fonts/`.
+- **Nothing from the design bundle's `uploads/`** — no invoice PDFs, screenshots,
+  source logo files or source fonts.
+- **Examples use fictional clients and people only**: Cascade Aquarium, Rainier
+  Health Foundation, Northwind Airlines, Sound Community College, Harbor Light
+  Brewing, Evergreen Arts Festival, with `@example.org` addresses. PD's own name
+  and published address are fine.
+- No literal hex, `rgba()`, `hsl()`, shadow, tracking or radius in `ui/src`; every
+  `var(--…)` a component reads must be defined in `tokens/tokens/*.css`.
 
 ## The Auth Code Exchange Pattern (read before touching auth)
 

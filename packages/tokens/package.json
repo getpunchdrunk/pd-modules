@@ -1,7 +1,7 @@
 {
   "name": "@punch-drunk/tokens",
-  "version": "1.0.0",
-  "description": "Punch Drunk design tokens, self-hosted webfonts, and global CSS for internal apps",
+  "version": "1.2.0",
+  "description": "Punch Drunk brand foundations: tokens, fonts, utilities",
   "main": "styles.css",
   "style": "styles.css",
   "exports": {

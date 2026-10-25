@@ -24,6 +24,11 @@
   --sidebar-width: 232px;
   --topbar-height: 48px;
   --page-padding: 24px;
+  /* Content cap, all three shell tiers. Chosen so a 1440px window with the
+     sidebar open yields exactly this width — which makes collapsing the sidebar
+     add gutter instead of reflowing tables, and makes every width from 1440 up
+     render identically. AppShell owns it; maxWidth={false} to opt out. */
+  --content-max: 1160px;
   --card-padding: 14px 16px;
   --cell-padding-x: 10px;
   --cell-padding-edge: 16px;

@@ -18,7 +18,7 @@ export function Dialog({
       style={{
         position: "absolute",
         inset: 0,
-        background: "rgba(33, 33, 33, 0.32)",
+        background: "var(--scrim)",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",

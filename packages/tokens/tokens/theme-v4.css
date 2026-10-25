@@ -32,14 +32,38 @@
   --color-chart-3: hsl(var(--chart-3));
   --color-chart-4: hsl(var(--chart-4));
   --color-chart-5: hsl(var(--chart-5));
+  --color-chart-6: hsl(var(--chart-6));
+  --color-chart-7: hsl(var(--chart-7));
+  --color-chart-8: hsl(var(--chart-8));
+
+  /* DELIBERATELY NOT BRIDGED — ruled 08/30/2026.
+     --event-*, --tag-1…6 and --app-accent-1…6 (plus the two grandfathered brand
+     accents) are component-internal palettes carrying a do-not-cross rule:
+     calendar entries use --event-*, user tags use --tag-*, wordmarks use
+     --app-accent-*, and actions stay system pink. Generating bg-tag-3 or
+     text-event-5 utilities would make crossing those families a one-word
+     mistake in any template. They stay reachable as var(--tag-3) inside the
+     component that owns them.
+
+     Two shape reasons reinforce it: they are full oklch() values rather than
+     channel triplets, so a bridge would read var(--tag-3), not
+     hsl(var(--tag-3)); and --event-* is not six colours but eighteen tokens,
+     three roles per hue (--event-N-fill / -edge / -wash), which does not map
+     onto one utility name at all.
+
+     Also unbridged for now — revisit only if screen-build friction proves it:
+     the status tints, the ink-on-dark set, the spacing scale, --surface-desk
+     and --content-max. */
 
   --font-heading: var(--font-heading);
   --font-sans: var(--font-sans);
   --font-mono: var(--font-mono);
 
+  --radius-xs: var(--radius-xs);
   --radius-sm: var(--radius-sm);
   --radius-md: var(--radius-md);
   --radius-lg: var(--radius-lg);
+  --radius-pill: var(--radius-pill);
 
   --shadow-xs: var(--shadow-xs);
   --shadow-sm: var(--shadow-sm);

@@ -28,21 +28,21 @@ export function Toast({
       }}
     >
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" strokeWidth="2" strokeLinecap="round" aria-hidden="true"
-        style={{ stroke: dark ? "#FFFFFF" : "var(--text-action)", flex: "0 0 16px" }}>
+        style={{ stroke: dark ? "var(--text-on-inverse)" : "var(--text-action)", flex: "0 0 16px" }}>
         {tone === "attention" ? <path d="M12 8v5M12 16.5v.5M12 3l9 17H3z" /> : <path d="M20 6L9 17l-5-5" />}
       </svg>
       <span
         style={{
           fontFamily: "var(--font-sans)",
           fontSize: 12.5,
-          color: dark ? "#FFFFFF" : "var(--text-primary)",
+          color: dark ? "var(--text-on-inverse)" : "var(--text-primary)",
           flex: 1,
           minWidth: 0
         }}
       >
         {message}
         {detail && (
-          <span style={{ color: dark ? "#D4D4D4" : "var(--text-muted)" }}> — {detail}</span>
+          <span style={{ color: dark ? "var(--text-on-inverse-muted)" : "var(--text-muted)" }}> — {detail}</span>
         )}
       </span>
       {typeof secondsLeft === "number" && (
@@ -51,7 +51,7 @@ export function Toast({
             fontFamily: "var(--font-mono)",
             fontVariantNumeric: "tabular-nums",
             fontSize: 11,
-            color: dark ? "#9A9A9A" : "var(--text-muted)",
+            color: dark ? "var(--text-on-inverse-faint)" : "var(--text-muted)",
             flex: "0 0 auto"
           }}
         >
@@ -70,7 +70,7 @@ export function Toast({
             fontFamily: "var(--font-sans)",
             fontSize: 12,
             fontWeight: 600,
-            color: dark ? "#FF6FA8" : "var(--text-action)",
+            color: dark ? "var(--action-on-inverse)" : "var(--text-action)",
             flex: "0 0 auto"
           }}
         >
@@ -89,7 +89,7 @@ export function Toast({
             cursor: "pointer",
             fontSize: 14,
             lineHeight: 1,
-            color: dark ? "#9A9A9A" : "var(--text-muted)",
+            color: dark ? "var(--text-on-inverse-faint)" : "var(--text-muted)",
             flex: "0 0 auto"
           }}
         >

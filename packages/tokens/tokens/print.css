@@ -1,0 +1,32 @@
+/* Print surfaces. Paper is not a screen: no shadows, no tinted cards, no
+   pink fills. Ink is near-black, rules are hairlines, and the only brand
+   colour on a printed page is a single accent hairline in the letterhead.
+
+   These tokens exist so a print component never hardcodes #000 — a client
+   template can retheme the ink without touching the layout. */
+
+:root {
+  --print-ink: #16161A;
+  --print-ink-soft: #55555C;
+  --print-ink-faint: #7B7B83;
+  --print-rule: #D9D9DE;
+  --print-rule-strong: #16161A;
+  --print-band: #F2F2F4;        /* table head + subtotal band, safe at 300dpi */
+  --print-accent: var(--pd-pink);
+  --print-gutter: 54px;
+  --print-rule-hair: 0.75px;
+}
+
+/* Anything printed forces its colours through and drops screen depth. */
+@media print {
+  [data-print-doc],
+  [data-print-doc] * {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    box-shadow: none !important;
+  }
+  [data-print-doc] table { break-inside: auto; }
+  [data-print-doc] thead { display: table-header-group; }
+  [data-print-doc] tr { break-inside: avoid; }
+  [data-print-doc] [data-print-keep] { break-inside: avoid; }
+}

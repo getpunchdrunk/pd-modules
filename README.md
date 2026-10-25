@@ -19,7 +19,50 @@ Express middleware for Punch Drunk Auth integration. Handles the complete OAuth 
 - Manual `Set-Cookie` signing to ensure cookie delivery
 - Security headers middleware
 
-## Installation
+### `@punch-drunk/tokens`
+
+Brand foundations for every internal Punch Drunk app: colour, type, spacing,
+radius, shadow, motion, interaction utilities, print, and the self-hosted fonts.
+One import gives an app the whole visual system.
+
+```css
+@import "@punch-drunk/tokens/styles.css";
+```
+
+Ships both themes. Tailwind v3 apps keep working via the channel triplets;
+`tokens/theme-v4.css` is the v4 bridge.
+
+### `@punch-drunk/ui`
+
+45 React components in nine families (core, forms, data, feedback, layout,
+charts, calendar, kanban, print), published as source with no build step, the
+same convention as `@punch-drunk/auth`. Each one ships a `.d.ts` props contract
+and a `.prompt.md` stating the rules that matter.
+
+Requires `@punch-drunk/tokens`. `recharts` is a peer dependency used by
+`LineChart`, `BarChart`, `StackedBarChart` and `DonutChart`; npm installs it
+automatically.
+
+The design system is for **internal PD apps** (Dashboard, Audition, Slider,
+FileTransfers, Scratchpad and the rest). CrewSheet and Endlist are separate
+products with their own brands and do not consume it.
+
+#### Installing tokens and ui
+
+Install both in **one** command, from the tarballs attached to each GitHub Release:
+
+```bash
+npm install \
+  https://github.com/getpunchdrunk/pd-modules/releases/download/tokens-v1.2.0/punch-drunk-tokens-1.2.0.tgz \
+  https://github.com/getpunchdrunk/pd-modules/releases/download/ui-v0.3.0/punch-drunk-ui-0.3.0.tgz
+```
+
+npm cannot install a subfolder of a git repo, so the `github:…#tag` form resolves
+to the unnamed workspace root and fails for these packages. Installing `ui` alone
+makes npm look for `@punch-drunk/tokens` on the public registry, where it does not
+exist.
+
+## Installation (`@punch-drunk/auth`)
 
 ```bash
 # Install from GitHub
@@ -70,42 +113,3 @@ await registerPunchDrunkAuth(app, {
 | File Transfers (Uploader) | https://files.punch-drunk.com | [/api/app-docs](https://files.punch-drunk.com/api/app-docs) |
 | CrewSheet | https://crewsheet.punch-drunk.com | [/api/app-docs](https://crewsheet.punch-drunk.com/api/app-docs) |
 | PD Auth (integration guide) | https://auth.punch-drunk.com | [/api/integration-guide](https://auth.punch-drunk.com/api/integration-guide) |
-
-
-
-### `@punch-drunk/tokens`
-
-Design tokens, self-hosted webfonts and global CSS for every PD app. Ships CSS
-as source — no build step.
-
-**Contents:** color, typography, spacing, radius, shadow and motion tokens;
-light and dark themes; the shared hover/press `elevate` utilities; the
-`.pd-stripes` brand texture; a Tailwind v4 `@theme` bridge plus v3-compatible
-channel triplets; and the Inter / Noto Sans Display / Geist Mono webfonts with
-their OFL licenses.
-
-```bash
-npm install github:getpunchdrunk/pd-modules#tokens-v1.0.0
-```
-
-```css
-@import "@punch-drunk/tokens/styles.css";
-```
-
-### `@punch-drunk/ui`
-
-React UI primitives styled entirely from the tokens. Ships source, no build
-step. Requires `@punch-drunk/tokens`.
-
-**Contents:** Button, IconButton, Badge, Card, Table, Input, Select, Combobox,
-Dialog, Toast — each with a `.d.ts` props contract and a `.prompt.md` usage
-doc. Layout primitives and the larger families (charts, calendar, kanban, file
-drop, comment threads, print views) are specified but not yet built.
-
-```bash
-npm install github:getpunchdrunk/pd-modules#ui-v0.1.0
-```
-
-```jsx
-import { Button, Card, Table } from "@punch-drunk/ui";
-```

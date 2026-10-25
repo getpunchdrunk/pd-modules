@@ -53,11 +53,25 @@
   --surface-sunken: hsl(0 0% 98%);
   --surface-sidebar: hsl(var(--sidebar));
   --surface-hover: hsl(0 0% 96%);
+  --surface-desk: hsl(0 0% 91%);        /* the grey around a sheet of paper or a mock — never a product surface */
+
+  /* Ink-on-dark: toasts and the undo bar sit on near-black in BOTH themes, so
+     they cannot use --text-* (which flips). These were literal hex in three
+     places before the drift audit. */
+  --surface-inverse: hsl(0 0% 13%);
+  --text-on-inverse: hsl(0 0% 100%);
+  --text-on-inverse-muted: hsl(0 0% 83%);
+  --text-on-inverse-faint: hsl(0 0% 60%);
+  --action-on-inverse: #FD5B9C;         /* pink lifted one step for a dark ground */
   --text-primary: hsl(var(--foreground));
   --text-secondary: hsl(0 0% 29%);
   --text-muted: hsl(var(--muted-foreground));
+  --text-disabled: hsl(0 0% 68%);       /* placeholder and unavailable text only. Never a real value. */
   --text-inverse: hsl(0 0% 100%);
   --text-action: var(--pd-pink-text);   /* pink as a letterform. Never --pd-pink for text. */
+  --scrim: hsl(0 0% 13% / 0.32);        /* behind a dialog or a command palette */
+  --text-heading-accent: var(--pd-navy);      /* display heading on a header wash */
+  --text-label-accent: var(--pd-sky-deep);    /* uppercase region label */
   --text-link: var(--pd-navy);
   --border-subtle: hsl(0 0% 95%);
   --border-default: hsl(var(--border));
@@ -76,6 +90,86 @@
   --surface-attention: #FFF5F9;
   --border-attention: #FBC6DC;
   --surface-info: #EDF5FB;
+
+  /* Status tints. These were being retyped as literal rgba() on every screen,
+     which is how the palette drifted. Alpha over the page surface, so they
+     survive a theme swap. */
+  --surface-action-faint: hsl(334 98% 52% / 0.05);   /* selected rows, bulk bar */
+  --surface-action-soft: hsl(334 98% 52% / 0.07);    /* active nav item */
+  --surface-action-tint: hsl(334 98% 52% / 0.09);    /* action badge */
+  --surface-positive-soft: hsl(233 51% 39% / 0.07);  /* active filter chip */
+  --surface-positive-tint: hsl(233 51% 39% / 0.09);  /* positive badge */
+  --border-positive-soft: hsl(233 51% 39% / 0.18);
+  --surface-info-tint: hsl(205 69% 43% / 0.16);      /* info badge */
+
+  /* ---- Calendar entries ----
+     NOT the brand, NOT the chart ramp. Calendar entries are identity tags for
+     dozens of parallel things, so they are low-chroma paper tints that recede:
+     six hues at one lightness and one chroma, fill for the body and edge for
+     the 2px source bar. Titles stay --text-primary — the tint carries the hue,
+     never the lettering. Brand pink is reserved inside the calendar for the one
+     event that needs you, today, and the now line.
+
+     Two steps per hue: -fill for the element that carries the colour (a chip, a
+     column header), -wash one step lighter for a whole surface behind white
+     cards, so the header still reads as a header and the cards still pop. */
+  --event-1-fill: oklch(0.955 0.014 255);   /* slate  */
+  --event-1-edge: oklch(0.62 0.060 255);
+  --event-1-wash: oklch(0.978 0.008 255);
+  --event-2-fill: oklch(0.955 0.016 200);   /* teal   */
+  --event-2-edge: oklch(0.62 0.060 200);
+  --event-2-wash: oklch(0.978 0.008 200);
+  --event-3-fill: oklch(0.955 0.016 150);   /* sage   */
+  --event-3-edge: oklch(0.62 0.060 150);
+  --event-3-wash: oklch(0.978 0.008 150);
+  --event-4-fill: oklch(0.955 0.018 80);    /* clay   */
+  --event-4-edge: oklch(0.62 0.060 80);
+  --event-4-wash: oklch(0.978 0.008 80);
+  --event-5-fill: oklch(0.955 0.016 285);   /* violet */
+  --event-5-edge: oklch(0.62 0.060 285);
+  --event-5-wash: oklch(0.978 0.008 285);
+  --event-6-fill: oklch(0.955 0.014 30);    /* warm   */
+  --event-6-edge: oklch(0.62 0.060 30);
+  --event-6-wash: oklch(0.978 0.008 30);
+
+  /* ---- User-chosen tag colours (pinned folders, and any future user label) ----
+     Same six hues as the calendar so the two never clash, but ONE value per hue
+     and more chroma: these render as 7px dots and small chips, where a calendar
+     edge's 0.060 goes muddy. Never the brand, never the chart ramp. If a user
+     can pick the colour, it comes from here. */
+  --tag-1: oklch(0.575 0.085 255);   /* slate  */
+  --tag-2: oklch(0.575 0.085 200);   /* teal   */
+  --tag-3: oklch(0.575 0.085 150);   /* sage   */
+  --tag-4: oklch(0.575 0.085 80);    /* clay   */
+  --tag-5: oklch(0.575 0.085 285);   /* violet */
+  --tag-6: oklch(0.575 0.085 30);    /* warm   */
+
+  /* ---- Per-app accent (the sub-app wordmark, and nothing else) ----
+     A named sub-app picks ONE of these at deploy time and spends it on its
+     wordmark. It does NOT become the app's action colour: pink stays the only
+     thing that means "this acts", in every app, or a producer moving between
+     Audition and Slider has to relearn the interface.
+
+     Same six hues as --event-* and --tag-*, so the three families never clash.
+     Third member of that hue family, tuned for 21px display lettering: one
+     lightness and one chroma, hue only, so five apps read as one set.
+     --pd-pink-text and --pd-navy are also legal choices, grandfathered because
+     Audition and Slider already ship them. Note pink-as-wordmark makes the
+     wordmark look actionable — prefer a family value for any NEW app. */
+  --app-accent-1: oklch(0.47 0.095 255);   /* slate  */
+  --app-accent-2: oklch(0.47 0.095 200);   /* teal   */
+  --app-accent-3: oklch(0.47 0.095 150);   /* sage   */
+  --app-accent-4: oklch(0.47 0.095 80);    /* clay   */
+  --app-accent-5: oklch(0.47 0.095 285);   /* violet */
+  --app-accent-6: oklch(0.47 0.095 30);    /* warm   */
+
+  /* The two grandfathered brand accents, as app wordmark colours. These do NOT
+     use the hue-only derivation: brand chroma (pink C 0.222, navy C 0.152) is far
+     above the family axis, and deriving them would visibly mute the brand. They
+     keep hand-tuned dark values instead — which is why both already exist in the
+     palette as --text-action and --status-positive. */
+  --app-accent-brand-pink: #D40C64;
+  --app-accent-brand-navy: #313C96;
 
   /* ---- Charts: brand first, then a categorical extension ---- */
   --chart-1: 334 98% 52%;
@@ -119,10 +213,33 @@
   --sidebar-accent-foreground: 209 50% 75%;
   --sidebar-ring: 334 98% 56%;
 
+  /* Custom properties substitute where they are DECLARED, so every alias built
+     on a channel triplet has to be re-declared here — overriding --card alone
+     leaves --surface-card frozen at its light value. */
+  --surface-page: hsl(var(--background));
+  --surface-card: hsl(var(--card));
+  --surface-sidebar: hsl(var(--sidebar));
   --surface-sunken: hsl(0 0% 5%);
   --surface-hover: hsl(0 0% 13%);
+  --surface-desk: hsl(0 0% 4%);
+  --surface-inverse: hsl(0 0% 22%);
+  --text-on-inverse: hsl(0 0% 100%);
+  --text-on-inverse-muted: hsl(0 0% 80%);
+  --text-on-inverse-faint: hsl(0 0% 62%);
+  --action-on-inverse: #FF6FA8;
+  --text-primary: hsl(var(--foreground));
   --text-secondary: hsl(0 0% 78%);
+  --text-muted: hsl(var(--muted-foreground));
+  --text-disabled: hsl(0 0% 40%);
+  --text-inverse: hsl(0 0% 7%);
+  --scrim: hsl(0 0% 0% / 0.58);
+  --border-default: hsl(var(--border));
+  --border-strong: hsl(var(--input));
+  --status-neutral: hsl(var(--muted-foreground));
+  --status-danger: hsl(var(--destructive));
   --text-link: #8E97E8;
+  --text-heading-accent: #8E97E8;             /* navy is unreadable on the dark wash */
+  --text-label-accent: var(--pd-sky-light);
   --border-subtle: hsl(0 0% 14%);
   --action-primary: #FD2A85;
   --action-primary-hover: #FD4E99;
@@ -133,9 +250,72 @@
   --border-attention: #5C1436;
   --surface-info: #0E1D2A;
 
+  --surface-action-faint: hsl(334 98% 56% / 0.10);
+  --surface-action-soft: hsl(334 98% 56% / 0.14);
+  --surface-action-tint: hsl(334 98% 56% / 0.18);
+  --surface-positive-soft: hsl(233 55% 62% / 0.12);
+  --surface-positive-tint: hsl(233 55% 62% / 0.18);
+  --border-positive-soft: hsl(233 55% 62% / 0.32);
+  --surface-info-tint: hsl(205 60% 55% / 0.20);
+
+  --event-1-fill: oklch(0.245 0.022 255);
+  --event-1-edge: oklch(0.66 0.075 255);
+  --event-1-wash: oklch(0.19 0.014 255);
+  --event-2-fill: oklch(0.245 0.024 200);
+  --event-2-edge: oklch(0.66 0.075 200);
+  --event-2-wash: oklch(0.19 0.014 200);
+  --event-3-fill: oklch(0.245 0.024 150);
+  --event-3-edge: oklch(0.66 0.075 150);
+  --event-3-wash: oklch(0.19 0.014 150);
+  --event-4-fill: oklch(0.245 0.026 80);
+  --event-4-edge: oklch(0.66 0.075 80);
+  --event-4-wash: oklch(0.19 0.014 80);
+  --event-5-fill: oklch(0.245 0.024 285);
+  --event-5-edge: oklch(0.66 0.075 285);
+  --event-5-wash: oklch(0.19 0.014 285);
+  --event-6-fill: oklch(0.245 0.022 30);
+  --event-6-edge: oklch(0.66 0.075 30);
+  --event-6-wash: oklch(0.19 0.014 30);
+
+  --app-accent-1: oklch(0.74 0.105 255);
+  --app-accent-2: oklch(0.74 0.105 200);
+  --app-accent-3: oklch(0.74 0.105 150);
+  --app-accent-4: oklch(0.74 0.105 80);
+  --app-accent-5: oklch(0.74 0.105 285);
+  --app-accent-6: oklch(0.74 0.105 30);
+  --app-accent-brand-pink: #FF6FA8;   /* hand-tuned, not derived — matches --text-action */
+  --app-accent-brand-navy: #8E97E8;   /* hand-tuned, not derived — matches --status-positive */
+
+  --tag-1: oklch(0.70 0.095 255);
+  --tag-2: oklch(0.70 0.095 200);
+  --tag-3: oklch(0.70 0.095 150);
+  --tag-4: oklch(0.70 0.095 80);
+  --tag-5: oklch(0.70 0.095 285);
+  --tag-6: oklch(0.70 0.095 30);
+
   --chart-1: 334 90% 60%;
   --chart-2: 209 58% 62%;
   --chart-3: 233 55% 62%;
   --chart-4: 204 60% 72%;
   --chart-5: 205 60% 55%;
+  /* 6-8 are the categorical extension, added in dark 08/30/2026. Same
+     adjustment as 1-5: hue held, lightness lifted into the 55-72% band the
+     other five occupy on the dark ground, saturation held. Without these a
+     chart silently truncated to five series in dark. */
+  --chart-6: 0 0% 68%;
+  --chart-7: 262 45% 66%;
+  --chart-8: 173 45% 58%;
+}
+
+/* Wordmark accent. Sidebar inlines --app-accent-light/-dark on the element and
+   this picks one per theme, because a custom property substitutes where it is
+   DECLARED — a single resolved property on :root/.dark could never see a pair
+   set on a descendant. Both selector forms, like .pd-stripes: our example pages
+   put the theme class on the same element as the target. */
+.pd-app-accent {
+  color: var(--app-accent-light, var(--text-primary));
+}
+.dark .pd-app-accent,
+.pd-app-accent.dark {
+  color: var(--app-accent-dark, var(--text-primary));
 }

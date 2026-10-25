@@ -1,8 +1,8 @@
 export function Badge({ children, tone = "neutral", size = "md", nowrap = true }) {
   const tones = {
-    action: { color: "var(--text-action)", background: "rgba(253, 12, 115, 0.09)" },
-    positive: { color: "var(--status-positive)", background: "rgba(49, 60, 150, 0.09)" },
-    info: { color: "var(--status-info)", background: "rgba(83, 151, 209, 0.16)" },
+    action: { color: "var(--text-action)", background: "var(--surface-action-tint)" },
+    positive: { color: "var(--status-positive)", background: "var(--surface-positive-tint)" },
+    info: { color: "var(--status-info)", background: "var(--surface-info-tint)" },
     neutral: { color: "var(--text-secondary)", background: "var(--surface-hover)" },
     count: { color: "var(--text-muted)", background: "var(--surface-hover)" }
   };

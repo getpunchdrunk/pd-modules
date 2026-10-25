@@ -24,4 +24,7 @@
   --shadow-xl: 0px 2px 0px 0px hsl(0 0% 0% / 0.20), 0px 8px 10px -1px hsl(0 0% 0% / 0.35);
   --shadow-2xl: 0px 2px 0px 0px hsl(0 0% 0% / 0.40);
   --shadow-overlay: 0px 8px 24px -6px hsl(0 0% 0% / 0.55), 0px 2px 6px -2px hsl(0 0% 0% / 0.40);
+
+  /* Re-declared: --ring changes in .dark, but the substitution froze upstream. */
+  --focus-ring: 0 0 0 3px hsl(var(--ring) / 0.20);
 }

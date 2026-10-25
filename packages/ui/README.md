@@ -1,85 +1,63 @@
 # @punch-drunk/ui
 
-React UI primitives for Punch Drunk internal apps. Ships source, no build step —
-consuming apps compile it through their own Vite pipeline, the same contract as
+React components for Punch Drunk internal apps. Published as source with no
+build step — `main` and `types` point at `src`, the same convention as
 `@punch-drunk/auth`.
 
-**Status: 0.1.0, ten primitives.** The layout and complex families are specified
-but not built (see "Not built yet").
-
-## Install
-
 ```bash
-npm install github:getpunchdrunk/pd-modules#ui-v0.1.0
+# Install tokens and ui together, in one command
+npm install \
+  https://github.com/getpunchdrunk/pd-modules/releases/download/tokens-v1.2.0/punch-drunk-tokens-1.2.0.tgz \
+  https://github.com/getpunchdrunk/pd-modules/releases/download/ui-v0.3.0/punch-drunk-ui-0.3.0.tgz
 ```
 
-This package styles itself entirely from CSS custom properties, so
-`@punch-drunk/tokens` must be installed and imported too — nothing renders
-correctly without it.
+Packages ship as tarballs attached to the GitHub Release for each tag. npm cannot
+install a subfolder of a git repo, so the old `github:getpunchdrunk/pd-modules#tag`
+form resolves to the unnamed workspace root and fails. Install both packages in
+**one** command: `@punch-drunk/ui` lists `@punch-drunk/tokens` as a peer, and
+installed alone npm would look for the tokens package on the public registry.
 
-```jsx
-import { Button, Card, Table, Badge } from "@punch-drunk/ui";
+Requires `@punch-drunk/tokens`. Import its stylesheet once in your CSS entry:
+
+```css
+@import "@punch-drunk/tokens/styles.css";
 ```
 
-## What's here
+`recharts` is a peer dependency, used only by `LineChart`, `BarChart`,
+`StackedBarChart` and `DonutChart`; npm installs it automatically. It is not
+optional, because the package barrel re-exports the charts, so importing anything
+from `@punch-drunk/ui` makes your bundler resolve `recharts`. `ChartFrame` and
+`BarCell` are dependency-free.
 
-| Component | Use for |
+## What's in it
+
+| Family | Components |
 |---|---|
-| `Button` | Every clickable action. Primary / secondary / ghost / danger, three sizes |
-| `IconButton` | A single unambiguous icon action; `label` is required |
-| `Badge` | Status pills and count badges — five tones |
-| `Card` | The only container. Title, eyebrow, meta, actions |
-| `Table` | Dense grid table that owns its own column math |
-| `Input` | Text, currency, date; hint and error states |
-| `Select` | Native select with our chrome, for 2–8 fixed options |
-| `Combobox` | Searchable single/multi select for long lists; fully controlled |
-| `Dialog` | Modal confirm for money and client-facing actions |
-| `Toast` | Transient confirmation, usually carrying an 8-second undo |
+| core | Button, IconButton, Badge, Card |
+| forms | Input, Select, Combobox |
+| data | Table, FilterBar (+ FilterChip), BulkActionBar, Pagination, StatBlock |
+| feedback | Dialog, Toast, EmptyState, Skeleton, SourceStatus, StaleBadge |
+| layout | AppShell, Sidebar, NavItem, Topbar, PageHeader |
+| charts | ChartFrame (+ ChartLegendItem), LineChart, BarChart, StackedBarChart, DonutChart, BarCell |
+| calendar | CalendarMonth, CalendarWeek, CalendarAgenda, CalendarNav, EventChip, DatePicker |
+| kanban | KanbanBoard, KanbanColumn, KanbanCard |
+| print | PrintDocHeader, PrintPartyBlock, PrintLineTable, PrintTotals, PrintNote, PrintFooter, PrintInvoice |
 
-Every component has a sibling `.d.ts` with its props contract and a
-`.prompt.md` with usage rules and the reasoning behind them. **Read the
-`.prompt.md` before using a component** — they carry the rules that stop known
-failures repeating.
+Each component ships a `.d.ts` props contract and a `.prompt.md` stating the
+rules that matter — read the `.prompt.md` before using a component in a new way.
 
-## The two rules that break things most often
+## Rules that will bite you
 
-**Table columns.** Any column holding a control, badge, date or figure gets an
-explicit `width` in px; only genuine text columns get `flex`. A wide child in a
-`1fr` track wins on min-content, steals width from the name columns, and the
-header — which has no control — resolves differently from the body. Before
-shipping a table: add the fixed widths, subtract from the card width, and check
-what's left for the text columns. Under ~150px for a name column means two-line
-rows.
-
-**Confirm vs undo.** Money and client-facing actions confirm in a `Dialog`;
-reversible ones fire optimistically with a `Toast` carrying undo. A cross-app
-write that fails *after* an optimistic success must revert the row and raise a
-persistent inline error — never a toast that may already have gone.
-
-## Conventions
-
-- **Inline styles reading CSS custom properties.** No CSS-in-JS, no stylesheets,
-  no class names except the shared `hover-elevate` / `active-elevate-2` /
-  `toggle-elevate` utilities from `@punch-drunk/tokens`.
-- **No npm dependencies.** React only.
-- **Sizes are outer sizes.** `tokens/base.css` sets `box-sizing: border-box`
-  globally; a bordered control and an unbordered one at the same declared size
-  must measure identically.
-- **Icons** come from `assets/icons/lucide-paths.json` (real Lucide geometry) at
-  `stroke-width="2"` with round caps and joins. Never redraw a glyph; never
-  change stroke weight to fit a layout.
-
-## Not built yet
-
-Layout: AppShell, Sidebar, NavItem, Topbar, PageHeader, FilterBar,
-BulkActionBar, Pagination, StatBlock, EmptyState, Skeleton, SourceStatus,
-StaleBadge.
-
-Families: Charts (Recharts wrappers on the brand ramp), Calendar and date
-picker, Kanban, file drop with previews, comment threads, search with results,
-print views.
-
-## Versioning
-
-Per-package tags: `ui-vMAJOR.MINOR.PATCH`, independent of `tokens-*` and
-`v*` (auth). Major for any change to a component's public props.
+- **Pink has two values.** `--action-primary` for fills, `--text-action`
+  whenever pink is the letterform. The fill value as text fails WCAG AA.
+- **Headers carry the blue.** Card headers and column-header rows take
+  `--surface-info` with `--text-heading-accent` and `--text-label-accent` on
+  them. Data rows never do.
+- **Never raw `--pd-navy` or `--pd-sky-deep` as a text colour** — they do not
+  flip in dark. Use the accent tokens.
+- **Calendar entries use `--event-1…6`**, charts use `--chart-*`, actions use
+  pink. Do not cross those three.
+- **Tables:** every column holding a control, badge, date or figure needs an
+  explicit px width. Only text columns get `flex`.
+- **`.pd-stripes`:** set the surface under it with `background-color`, never the
+  `background` shorthand, which erases the texture.

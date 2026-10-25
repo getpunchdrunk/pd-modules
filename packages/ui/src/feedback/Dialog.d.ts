@@ -7,7 +7,7 @@ import type { ReactNode } from "react";
  */
 export interface DialogProps {
   open?: boolean;
-  /** Names the consequence, not the control: "Approve $14,180 to Cine Rentals NW". */
+  /** Names the consequence, not the control: "Approve $14,180 to Cascade Gear Rentals". */
   title?: ReactNode;
   /** The facts the person needs to decide. Amount, counterparty, what changes downstream. */
   description?: ReactNode;
