@@ -8,7 +8,7 @@ build step — `main` and `types` point at `src`, the same convention as
 # Install tokens and ui together, in one command
 npm install \
   https://github.com/getpunchdrunk/pd-modules/releases/download/tokens-v1.2.0/punch-drunk-tokens-1.2.0.tgz \
-  https://github.com/getpunchdrunk/pd-modules/releases/download/ui-v0.3.0/punch-drunk-ui-0.3.0.tgz
+  https://github.com/getpunchdrunk/pd-modules/releases/download/ui-v0.4.0/punch-drunk-ui-0.4.0.tgz
 ```
 
 Packages ship as tarballs attached to the GitHub Release for each tag. npm cannot
@@ -34,7 +34,7 @@ from `@punch-drunk/ui` makes your bundler resolve `recharts`. `ChartFrame` and
 | Family | Components |
 |---|---|
 | core | Button, IconButton, Badge, Card |
-| forms | Input, Select, Combobox |
+| forms | Input, Textarea, Select, SegmentedControl, Combobox |
 | data | Table, FilterBar (+ FilterChip), BulkActionBar, Pagination, StatBlock |
 | feedback | Dialog, Toast, EmptyState, Skeleton, SourceStatus, StaleBadge |
 | layout | AppShell, Sidebar, NavItem, Topbar, PageHeader |

@@ -1,4 +1,4 @@
-/* @punch-drunk/ui — 45 components in nine families.
+/* @punch-drunk/ui — 47 components in nine families.
  *
  * Published as source with no build step, matching @punch-drunk/auth: main and
  * types point at src. Import from the package root; the families are an
@@ -16,7 +16,9 @@ export * from "./core/Card.jsx";
 
 /* forms — Form controls */
 export * from "./forms/Input.jsx";
+export * from "./forms/Textarea.jsx";
 export * from "./forms/Select.jsx";
+export * from "./forms/SegmentedControl.jsx";
 export * from "./forms/Combobox.jsx";
 
 /* data — Tables and the chrome around them */

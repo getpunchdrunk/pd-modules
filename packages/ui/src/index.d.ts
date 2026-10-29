@@ -17,7 +17,9 @@ export * from "./core/Card";
 
 /* forms — Form controls */
 export * from "./forms/Input";
+export * from "./forms/Textarea";
 export * from "./forms/Select";
+export * from "./forms/SegmentedControl";
 export * from "./forms/Combobox";
 
 /* data — Tables and the chrome around them */
