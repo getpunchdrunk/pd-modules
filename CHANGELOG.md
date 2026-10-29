@@ -2,6 +2,17 @@
 
 All notable changes to `pd-modules` packages are recorded here.
 
+## [@punch-drunk/ui 0.4.0] — prepared for release
+
+- Add `Textarea`: native multiline input with Input-style label, hint, error,
+  disabled and size props, typed native attributes, forwarded ref, and optional
+  auto-grow bounded by `maxRows`.
+- Add `SegmentedControl`: controlled compact radio group with dense sizing,
+  wrapping keyboard navigation, disabled options and accessible text markers.
+- Export both components and their TypeScript contracts; include usage prompts.
+- Update install URLs for the forthcoming `ui-v0.4.0` release. Existing
+  components, tokens and auth are unchanged.
+
 ## [@punch-drunk/ui 0.3.0] — 2026-10-25
 
 Shell rewrite. **`Sidebar` and `AppShell` have breaking prop changes** — read

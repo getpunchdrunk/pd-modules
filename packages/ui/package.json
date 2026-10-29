@@ -1,6 +1,6 @@
 {
   "name": "@punch-drunk/ui",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Punch Drunk React UI components for internal apps",
   "main": "src/index.js",
   "types": "src/index.d.ts",

@@ -34,7 +34,7 @@ Ships both themes. Tailwind v3 apps keep working via the channel triplets;
 
 ### `@punch-drunk/ui`
 
-45 React components in nine families (core, forms, data, feedback, layout,
+47 React components in nine families (core, forms, data, feedback, layout,
 charts, calendar, kanban, print), published as source with no build step, the
 same convention as `@punch-drunk/auth`. Each one ships a `.d.ts` props contract
 and a `.prompt.md` stating the rules that matter.
@@ -54,7 +54,7 @@ Install both in **one** command, from the tarballs attached to each GitHub Relea
 ```bash
 npm install \
   https://github.com/getpunchdrunk/pd-modules/releases/download/tokens-v1.2.0/punch-drunk-tokens-1.2.0.tgz \
-  https://github.com/getpunchdrunk/pd-modules/releases/download/ui-v0.3.0/punch-drunk-ui-0.3.0.tgz
+  https://github.com/getpunchdrunk/pd-modules/releases/download/ui-v0.4.0/punch-drunk-ui-0.4.0.tgz
 ```
 
 npm cannot install a subfolder of a git repo, so the `github:…#tag` form resolves

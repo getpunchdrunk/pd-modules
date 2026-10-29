@@ -7,7 +7,7 @@ shadow, motion, interaction utilities, print, and the self-hosted fonts.
 # Install tokens and ui together, in one command
 npm install \
   https://github.com/getpunchdrunk/pd-modules/releases/download/tokens-v1.2.0/punch-drunk-tokens-1.2.0.tgz \
-  https://github.com/getpunchdrunk/pd-modules/releases/download/ui-v0.3.0/punch-drunk-ui-0.3.0.tgz
+  https://github.com/getpunchdrunk/pd-modules/releases/download/ui-v0.4.0/punch-drunk-ui-0.4.0.tgz
 ```
 
 Packages ship as tarballs attached to the GitHub Release for each tag. npm cannot
